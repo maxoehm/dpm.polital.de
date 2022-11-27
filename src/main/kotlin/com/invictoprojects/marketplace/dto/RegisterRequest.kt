@@ -6,4 +6,4 @@ class RegisterRequest(
     @NotNull var email: String,
     @NotNull var username: String,
     @NotNull var password: String
-)
+    )

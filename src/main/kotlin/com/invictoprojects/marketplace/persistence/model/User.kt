@@ -1,26 +1,28 @@
 package com.invictoprojects.marketplace.persistence.model
 
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 import java.time.Instant
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 import javax.validation.constraints.Email
 
 @Entity
 @Table(name = "users")
-class User(
+class User (
     var username: String,
     @Email var email: String,
     @Column(name = "password_hash") var passwordHash: String? = null,
     @Column(name = "created_date") var createdDate: Instant? = null,
     @Column(name = "role_type") var role: Role = Role.USER,
+    @Column(name = "user_information")
     var enabled: Boolean = false,
     var subscribed: Boolean = true,
     @Id @GeneratedValue
-    var id: Long? = null
+    var id: Long? = null,
+    @OneToOne(cascade = [CascadeType.PERSIST], optional = false, orphanRemoval = true)
+    @JoinColumn(name = "user_information_id", referencedColumnName = "user_information_id", nullable = false)
+    open var userInformation: UserInformation? = UserInformation()
 ) {
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -50,4 +52,5 @@ class User(
         result = 31 * result + (id?.hashCode() ?: 0)
         return result
     }
+
 }

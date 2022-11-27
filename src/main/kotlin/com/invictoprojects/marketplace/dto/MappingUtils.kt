@@ -1,5 +1,6 @@
 package com.invictoprojects.marketplace.dto
 
+import com.invictoprojects.marketplace.dto.user.UserInformationDto
 import com.invictoprojects.marketplace.persistence.model.Category
 import com.invictoprojects.marketplace.persistence.model.Order
 import com.invictoprojects.marketplace.persistence.model.OrderProduct
@@ -8,6 +9,13 @@ import com.invictoprojects.marketplace.persistence.model.OrderStatus
 import com.invictoprojects.marketplace.persistence.model.Product
 import com.invictoprojects.marketplace.persistence.model.Review
 import com.invictoprojects.marketplace.persistence.model.User
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
+import com.invictoprojects.marketplace.persistence.model.user.extended.Nft
+import java.time.Instant
+import java.util.*
+import javax.validation.constraints.Email
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 object MappingUtils {
 
@@ -55,6 +63,25 @@ object MappingUtils {
             email = userDto.email,
             subscribed = userDto.subscribed
         )
+    }
+    
+    fun convertToEntity(userInfoDto: UserInformationDto): UserInformation {
+        return UserInformation(
+            username = userInfoDto.username,
+            social = userInfoDto.social,
+            followers = userInfoDto.followers,
+            wallet= userInfoDto.wallet,
+            bids = userInfoDto.bid,
+            authorSale = userInfoDto.author_sale,
+            about = userInfoDto.about,
+            published_at = userInfoDto.published_at,
+            updated_at = Date.from(Instant.now()),
+            avatar= userInfoDto.avatar,
+            banner= userInfoDto.banner,
+            nft = userInfoDto.nfts,
+            hotCollections = userInfoDto.hot_collections
+        )
+
     }
 
     private fun convertToDto(user: User): UserDto {
