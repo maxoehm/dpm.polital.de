@@ -29,16 +29,19 @@ class Nft(
     var published_at: Date? = null,
     var created_at: Date? = null,
     var updated_at: Date? = null,
-    ) {
 
     @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "preview_image_id")
-    open var previewImage: PreviewImage? = null
+    @JoinColumn(name = "id")
+    open var previewImage: PreviewImage? = null,
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     open var id: Long? = null
+
+    ) {
+
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
