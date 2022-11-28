@@ -75,4 +75,10 @@ class JwtProvider(
         return jwtEncoder(principal.username)
     }
 
+    //ToDo: Check if this can be replaced, and how it correlates with session storage
+    fun generateTokenWithEmail(email: String): String {
+        return jwtEncoder(email)
+    }
+
+
 }
