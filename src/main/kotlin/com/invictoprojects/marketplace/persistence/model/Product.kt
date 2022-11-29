@@ -22,7 +22,7 @@ class Product(
     var quantity: Long,
     var avgRating: Float? = null,
     var ratingCount: Long = 0,
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = [CascadeType.REMOVE], orphanRemoval = false)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE], orphanRemoval = false)
     var reviews: MutableList<Review>? = null,
     @Id @GeneratedValue
     var id: Long? = null
