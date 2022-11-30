@@ -8,6 +8,14 @@ import com.invictoprojects.marketplace.persistence.model.OrderStatus
 import com.invictoprojects.marketplace.persistence.model.Product
 import com.invictoprojects.marketplace.persistence.model.Review
 import com.invictoprojects.marketplace.persistence.model.User
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
+import com.invictoprojects.marketplace.persistence.model.user.extended.AuthorSale
+import com.invictoprojects.marketplace.persistence.model.user.extended.Avatar
+import com.invictoprojects.marketplace.persistence.model.user.extended.Banner
+import com.invictoprojects.marketplace.persistence.model.user.extended.Bid
+import java.util.*
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 object MappingUtils {
 
@@ -88,17 +96,39 @@ object MappingUtils {
         )
     }
 
-    fun convertToDto(review: Review) = ReviewDto(
-        author = convertToDto(review.author!!),
-        rating = review.rating,
-        date = review.date,
-        content = review.content
-    )
+    fun convertToEntity(userInfo: UserInformationDto): UserInformation {
+        return UserInformation(
+        username = userInfo.username,
+        social = userInfo.social,
+        wallet = userInfo.wallet,
+        followers = userInfo.followers,
+        about = userInfo.about,
 
-    fun convertToEntity(reviewCreationDto: ReviewCreationDto) = Review(
+        published_at = userInfo.published_at,
+        user_information_id = userInfo.user_information_id,
+
+        bids = userInfo.bids,
+        authorSale = userInfo.authorSale,
+        avatar = userInfo.avatar,
+        banner = userInfo.banner,
+        )
+    }
+
+    fun convertToDto(review: Review): ReviewDto {
+        return ReviewDto(
+            author = convertToDto(review.author!!),
+            rating = review.rating,
+            date = review.date,
+            content = review.content
+        )
+    }
+
+    fun convertToEntity(reviewCreationDto: ReviewCreationDto): Review {
+        return Review(
         rating = reviewCreationDto.rating,
         content = reviewCreationDto.content
     )
+    }
 
     private fun convertToEntity(orderDto: OrderDto): Order {
         return Order(

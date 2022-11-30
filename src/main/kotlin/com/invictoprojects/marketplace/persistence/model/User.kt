@@ -1,11 +1,8 @@
 package com.invictoprojects.marketplace.persistence.model
 
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 import java.time.Instant
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 import javax.validation.constraints.Email
 
 @Entity
@@ -20,6 +17,8 @@ class User(
     var subscribed: Boolean = true,
     @Id @GeneratedValue
     var id: Long? = null
+
+
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -50,4 +49,12 @@ class User(
         result = 31 * result + (id?.hashCode() ?: 0)
         return result
     }
+
+    @OneToOne(
+        cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH],
+        orphanRemoval = true
+    )
+    @JoinColumn(name = "user_information_id")
+    var userInformation: UserInformation = UserInformation()
+
 }

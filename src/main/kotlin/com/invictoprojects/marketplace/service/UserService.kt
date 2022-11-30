@@ -1,7 +1,9 @@
 package com.invictoprojects.marketplace.service
 
+import com.invictoprojects.marketplace.dto.UserInformationDto
 import com.invictoprojects.marketplace.persistence.model.Role
 import com.invictoprojects.marketplace.persistence.model.User
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 
 interface UserService {
     fun create(username: String, email: String, passwordHash: String): User
@@ -10,6 +12,7 @@ interface UserService {
 
     fun update(user: User): User
 
+    fun updateByDto(user: UserInformationDto): UserInformation
     fun findAll(): MutableIterable<User>
 
     fun findByEmail(email: String): User?

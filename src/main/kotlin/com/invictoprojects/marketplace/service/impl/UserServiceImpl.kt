@@ -1,7 +1,11 @@
 package com.invictoprojects.marketplace.service.impl
 
+import com.invictoprojects.marketplace.dto.MappingUtils
+import com.invictoprojects.marketplace.dto.UserInformationDto
 import com.invictoprojects.marketplace.persistence.model.Role
 import com.invictoprojects.marketplace.persistence.model.User
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
+import com.invictoprojects.marketplace.persistence.repository.UserInformationRepository
 import com.invictoprojects.marketplace.persistence.repository.UserRepository
 import com.invictoprojects.marketplace.service.UserService
 import org.springframework.security.core.context.SecurityContextHolder
@@ -11,7 +15,7 @@ import java.time.Instant
 import javax.persistence.EntityNotFoundException
 
 @Service
-class UserServiceImpl(private val userRepository: UserRepository) : UserService {
+class UserServiceImpl(private val userRepository: UserRepository, private val userInformationRepository: UserInformationRepository) : UserService {
 
     override fun create(username: String, email: String, passwordHash: String): User {
         if (userRepository.existsByEmail(email)) {
@@ -44,6 +48,41 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
             passwordHash = current.passwordHash
         }
         return userRepository.save(user)
+    }
+
+    override fun updateByDto(user: UserInformationDto): UserInformation {
+
+        val currentUser: UserInformation = MappingUtils.convertToEntity(user);
+
+        if (!userInformationRepository.existsById(user.user_information_id!!)) {
+            saveUserInformation(currentUser)
+            throw EntityNotFoundException("User with id ${currentUser.user_information_id} does not exist")
+        }
+
+        val userEntity = userInformationRepository.findById(currentUser.user_information_id!!).get()
+
+        //ToDo here logic what to save under what circumstances
+        return userInformationRepository.save(currentUser)
+    }
+
+    //ToDo Validate input secure that only intended user can modify their fields
+    fun saveUserInformation(user: UserInformation) {
+
+        if (!userInformationRepository.existsById(user.user_information_id!!)) {
+            val userMain = getCurrentUser()
+            userInformationRepository.save(user)
+            userMain.userInformation = userInformationRepository.findByUsername(user.username).get()
+            userRepository.save(userMain)
+        }
+
+        throw EntityNotFoundException("User with id ${user.user_information_id} does exist")
+    }
+
+    fun updateDeac(user: UserInformationDto): UserInformation {
+        if (!userInformationRepository.existsById(user.user_information_id!!)) {
+            throw EntityNotFoundException("User with id ${user.user_information_id} does not exist")
+        }
+        return userInformationRepository.save(MappingUtils.convertToEntity(user))
     }
 
     override fun findAll(): MutableIterable<User> {

@@ -1,5 +1,6 @@
 package com.invictoprojects.marketplace.persistence.model.user.extended
 
+import org.springframework.lang.Nullable
 import java.util.*
 import javax.persistence.*
 

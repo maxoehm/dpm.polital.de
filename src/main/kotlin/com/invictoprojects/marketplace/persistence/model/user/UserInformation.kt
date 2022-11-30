@@ -2,6 +2,7 @@ package com.invictoprojects.marketplace.persistence.model.user
 
 import com.invictoprojects.marketplace.persistence.model.user.extended.*
 import org.hibernate.annotations.CreationTimestamp
+import org.springframework.lang.Nullable
 import java.util.*
 import javax.persistence.*
 
@@ -26,16 +27,16 @@ class UserInformation (
     var user_information_id: Long? = null,
 
     @Embedded
-    var bids: Bid? = null,
+    var bids: Bid = Bid(),
 
     @Embedded
-    var authorSale: AuthorSale? = null,
+    var authorSale: AuthorSale = AuthorSale(),
 
     @Embedded
-    var avatar: Avatar? = null,
+    var avatar: Avatar = Avatar(),
 
     @Embedded
-    var banner: Banner? = null,
+    var banner: Banner = Banner(),
 
 
 
