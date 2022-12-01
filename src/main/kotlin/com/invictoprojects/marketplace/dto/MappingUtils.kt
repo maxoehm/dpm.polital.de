@@ -1,5 +1,9 @@
 package com.invictoprojects.marketplace.dto
 
+import com.invictoprojects.marketplace.dto.user.AuthorSaleDto
+import com.invictoprojects.marketplace.dto.user.AvatarDto
+import com.invictoprojects.marketplace.dto.user.BannerDto
+import com.invictoprojects.marketplace.dto.user.BidDto
 import com.invictoprojects.marketplace.persistence.model.Category
 import com.invictoprojects.marketplace.persistence.model.Order
 import com.invictoprojects.marketplace.persistence.model.OrderProduct
@@ -9,13 +13,7 @@ import com.invictoprojects.marketplace.persistence.model.Product
 import com.invictoprojects.marketplace.persistence.model.Review
 import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.persistence.model.user.UserInformation
-import com.invictoprojects.marketplace.persistence.model.user.extended.AuthorSale
-import com.invictoprojects.marketplace.persistence.model.user.extended.Avatar
-import com.invictoprojects.marketplace.persistence.model.user.extended.Banner
-import com.invictoprojects.marketplace.persistence.model.user.extended.Bid
-import java.util.*
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
+import com.invictoprojects.marketplace.persistence.model.user.extended.*
 
 object MappingUtils {
 
@@ -107,10 +105,70 @@ object MappingUtils {
         published_at = userInfo.published_at,
         user_information_id = userInfo.user_information_id,
 
-        bids = userInfo.bids,
-        authorSale = userInfo.authorSale,
-        avatar = userInfo.avatar,
-        banner = userInfo.banner,
+        )
+    }
+//ToDo Implement these and their mapping
+    
+    fun convertToEntity(avatarDto: AvatarDto): Avatar {
+        return Avatar(
+             name= avatarDto.name,
+             alternativeText= avatarDto.alternativeText,
+             caption= avatarDto.caption,
+             width= avatarDto.width,
+             height= avatarDto.height,
+             hash= avatarDto.hash,
+             ext= avatarDto.ext,
+             mime= avatarDto.mime,
+             size= avatarDto.size,
+             url= avatarDto.url,
+             previewUrl= avatarDto.previewUrl,
+             provider= avatarDto.provider,
+             provider_metadata= avatarDto.provider_metadata,
+             formats = avatarDto.formats,
+        )
+    }
+
+    fun convertToEntity(banner: BannerDto): Banner {
+        return Banner(
+            name= banner.name,
+            alternativeText= banner.alternativeText,
+            caption= banner.caption,
+            width= banner.width,
+            height= banner.height,
+            hash= banner.hash,
+            ext= banner.ext,
+            mime= banner.mime,
+            size= banner.size,
+            url= banner.url,
+            previewUrl= banner.previewUrl,
+            provider= banner.provider,
+            provider_metadata= banner.provider_metadata,
+            formats = banner.formats,
+        )
+    }
+    
+    fun convertToEntity(bid: BidDto): Bid {
+        return Bid(
+        BidId = bid.BidId,
+        value = bid.value,
+        nft = bid.nft,
+        author = bid.author,
+        published_at = bid.published_at,
+        userInformation = bid.userInformation,
+        )
+    }
+
+    fun convertToEntity(authorSale: AuthorSaleDto): AuthorSale {
+        return AuthorSale(
+        sales = authorSale.sales,
+        volume = authorSale.volume,
+        daily_sales = authorSale.daily_sales,
+        weekly_sales = authorSale.weekly_sales,
+        floor_price = authorSale.floor_price,
+        owners = authorSale.owners,
+        assets = authorSale.assets,
+        authorId = authorSale.authorId,
+        userInformation =  authorSale.userInformation,
         )
     }
 

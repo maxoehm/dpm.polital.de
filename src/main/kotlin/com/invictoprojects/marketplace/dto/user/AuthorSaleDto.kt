@@ -1,5 +1,6 @@
 package com.invictoprojects.marketplace.dto.user
 
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 import org.springframework.lang.Nullable
 import java.util.*
 import javax.persistence.Column
@@ -15,6 +16,8 @@ data class AuthorSaleDto(
     var assets: Double = 0.0,
     var author: Int = 0,
     var published_at: Date? = null,
+    var authorId: Long = 0,
+    var userInformation: UserInformation
     )
 
 

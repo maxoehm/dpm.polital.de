@@ -1,9 +1,6 @@
 package com.invictoprojects.marketplace.dto.user
 
 import com.invictoprojects.marketplace.persistence.model.user.extended.Formats
-import java.util.*
-import javax.persistence.Column
-import javax.persistence.Embedded
 
 data class AvatarDto(
     var AvatarId: Int = 0,

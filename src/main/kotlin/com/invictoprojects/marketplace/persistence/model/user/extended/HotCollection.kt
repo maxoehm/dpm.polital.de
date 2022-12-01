@@ -19,10 +19,10 @@ class HotCollection(
     var created_at: Date? = null,
     var updated_at: Date? = null,
 ) {
-
-
-    @Embedded
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "id")
     open var banner: Banner? = null
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

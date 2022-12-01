@@ -1,10 +1,11 @@
 package com.invictoprojects.marketplace.persistence.model.user.extended
 
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 import org.springframework.lang.Nullable
 import java.util.*
 import javax.persistence.*
 
-@Embeddable
+@Entity
 class Bid(
     var BidId: Int = 0,
     var value: Double = 0.0,
@@ -15,7 +16,17 @@ class Bid(
     var published_at: Date? = null,
     // var created_at: Date? = null,
     @Column(name = "updated_at", insertable = false, updatable = false)
-    var updated_at: Date? = null) {
+    var updated_at: Date? = null,
+    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+    @JoinColumn(name = "user_information_user_information_id")
+    var userInformation: UserInformation? = null
+) {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    open var id: Long? = null
 
 
 }

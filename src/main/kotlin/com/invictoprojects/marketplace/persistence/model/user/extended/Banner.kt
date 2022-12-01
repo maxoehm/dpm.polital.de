@@ -2,10 +2,18 @@ package com.invictoprojects.marketplace.persistence.model.user.extended
 
 import java.util.*
 import javax.persistence.*
+import javax.validation.constraints.NotNull
 
-@Embeddable
+@Entity
 class Banner(
-    var BannerId: Int = 0,
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    var id: Long? = null,
+
+    @NotNull
+    var banner_user_info_id: Long? = null,
     @Column(name = "name", insertable = false, updatable = false)
     var name: String? = null,
         @Column(name = "alternative_text", insertable = false, updatable = false)
@@ -34,8 +42,12 @@ class Banner(
     var provider_metadata: String? = null,
     // var created_at: Date? = null,
     @Column(name = "url", insertable = false, updatable = false)
-    var updated_at: Date? = null) {
+    var updated_at: Date? = null,
+
     @Embedded
-    open var formats: Formats? = null
+    var formats: Formats? = null) {
+
+
+
 
 }

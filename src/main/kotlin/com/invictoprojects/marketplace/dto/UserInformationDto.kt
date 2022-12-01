@@ -26,10 +26,10 @@ data class UserInformationDto(
     @NotNull
     var user_information_id: Long? = null,
 
-    var bids: Bid = Bid(),
-    var authorSale: AuthorSale = AuthorSale(),
-    var avatar: Avatar = Avatar(),
-    var banner: Banner = Banner(),
+    var bids: Bid? = null,
+    var authorSales: AuthorSale? = null,
+    var avatar: Avatar? = null,
+    var banner: Banner? = null,
 ) {
 
 }

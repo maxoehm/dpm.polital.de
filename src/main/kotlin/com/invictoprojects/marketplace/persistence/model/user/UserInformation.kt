@@ -1,5 +1,6 @@
 package com.invictoprojects.marketplace.persistence.model.user
 
+import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.persistence.model.user.extended.*
 import org.hibernate.annotations.CreationTimestamp
 import org.springframework.lang.Nullable
@@ -26,20 +27,6 @@ class UserInformation (
     @Column(name = "user_information_id", nullable = false, insertable = false, updatable = false)
     var user_information_id: Long? = null,
 
-    @Embedded
-    var bids: Bid = Bid(),
-
-    @Embedded
-    var authorSale: AuthorSale = AuthorSale(),
-
-    @Embedded
-    var avatar: Avatar = Avatar(),
-
-    @Embedded
-    var banner: Banner = Banner(),
-
-
-
 ) {
     @OneToMany(mappedBy = "userInformation", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
     open var nfts: MutableList<Nft> = mutableListOf()
@@ -51,4 +38,22 @@ class UserInformation (
 
     @OneToMany(mappedBy = "userInformation", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
     open var previewImages: MutableList<PreviewImage> = mutableListOf()
+
+    @OneToMany(mappedBy = "userInformation", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
+    open var authorSales: MutableList<AuthorSale> = mutableListOf()
+
+    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "id")
+    var user: User? = null
+
+    @OneToMany(mappedBy = "userInformation", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
+    open var bids: MutableList<Bid> = mutableListOf()
+
+    @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
+    @JoinColumn(name = "banner_user_info_id")
+    var banner: Banner? = null
+
+    @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
+    @JoinColumn(name = "avatar_id")
+    open var avatar: Avatar? = null
 }

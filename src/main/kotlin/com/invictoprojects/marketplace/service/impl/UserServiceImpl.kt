@@ -67,11 +67,10 @@ class UserServiceImpl(private val userRepository: UserRepository, private val us
 
     //ToDo Validate input secure that only intended user can modify their fields
     fun saveUserInformation(user: UserInformation) {
-
         if (!userInformationRepository.existsById(user.user_information_id!!)) {
             val userMain = getCurrentUser()
-            userInformationRepository.save(user)
-            userMain.userInformation = userInformationRepository.findByUsername(user.username).get()
+            userMain.userInformation = user
+            user.user = userMain
             userRepository.save(userMain)
         }
 

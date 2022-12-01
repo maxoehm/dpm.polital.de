@@ -55,6 +55,6 @@ class User(
         orphanRemoval = true
     )
     @JoinColumn(name = "user_information_id")
-    var userInformation: UserInformation = UserInformation()
+    var userInformation: UserInformation? = null
 
 }
