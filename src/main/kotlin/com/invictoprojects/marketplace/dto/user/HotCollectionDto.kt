@@ -15,5 +15,4 @@ data class HotCollectionDto(
     var updated_at: Date? = null,
     var banner: Banner? = null,
     var userInformation: UserInformation? = null,
-
 )

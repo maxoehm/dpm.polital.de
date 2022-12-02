@@ -1,6 +1,10 @@
 package com.invictoprojects.marketplace.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.invictoprojects.marketplace.dto.user.AuthorSaleDto
+import com.invictoprojects.marketplace.dto.user.AvatarDto
+import com.invictoprojects.marketplace.dto.user.BannerDto
+import com.invictoprojects.marketplace.dto.user.BidDto
 import com.invictoprojects.marketplace.persistence.model.user.extended.AuthorSale
 import com.invictoprojects.marketplace.persistence.model.user.extended.Avatar
 import com.invictoprojects.marketplace.persistence.model.user.extended.Banner
@@ -26,10 +30,10 @@ data class UserInformationDto(
     @NotNull
     var user_information_id: Long? = null,
 
-    var bids: Bid? = null,
-    var authorSales: AuthorSale? = null,
-    var avatar: Avatar? = null,
-    var banner: Banner? = null,
+    var bids: BidDto? = null,
+    var authorSales: AuthorSaleDto? = null,
+    var avatar: AvatarDto? = null,
+    var banner: BannerDto? = null,
 ) {
 
 }

@@ -1,4 +1,4 @@
-package com.invictoprojects.marketplace.service
+package com.invictoprojects.marketplace.service.impl.user
 
 import com.invictoprojects.marketplace.dto.UserInformationDto
 import com.invictoprojects.marketplace.persistence.model.Role
@@ -12,7 +12,6 @@ interface UserService {
 
     fun update(user: User): User
 
-    fun updateByDto(user: UserInformationDto): UserInformation
     fun findAll(): MutableIterable<User>
 
     fun findByEmail(email: String): User?
@@ -28,4 +27,6 @@ interface UserService {
     fun getCurrentUser(): User
 
     fun findAllBySubscribedIsTrue(): MutableIterable<User>
+
+    fun updateInformation(user: User)
 }

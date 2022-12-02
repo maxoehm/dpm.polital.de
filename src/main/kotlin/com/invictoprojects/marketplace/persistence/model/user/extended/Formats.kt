@@ -6,18 +6,22 @@ import com.invictoprojects.marketplace.persistence.model.user.extended.formats.S
 import com.invictoprojects.marketplace.persistence.model.user.extended.formats.Thumbnail
 import javax.persistence.*
 
-@Embeddable
-class Formats() {
+@Entity
+class Formats(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    open var id: Long? = null,
 
     @Embedded
-    var small: Small? = null
+    var small: Small? = null,
 
     @Embedded
-    var medium: Medium? = null
+    var medium: Medium? = null,
 
     @Embedded
-    var large: Large? = null
+    var large: Large? = null,
 
     @Embedded
-    var thumbnail: Thumbnail? = null
+    var thumbnail: Thumbnail? = null) {
 }

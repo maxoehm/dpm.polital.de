@@ -4,7 +4,7 @@ import com.invictoprojects.marketplace.persistence.model.Product
 import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.service.ProductService
 import com.invictoprojects.marketplace.service.RecommendationService
-import com.invictoprojects.marketplace.service.UserService
+import com.invictoprojects.marketplace.service.impl.user.UserService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

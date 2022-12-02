@@ -3,41 +3,44 @@ package com.invictoprojects.marketplace.persistence.model.user.extended
 import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import java.util.*
 import javax.persistence.*
 
 @Entity
 class Nft(
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var nftId: Int,
     var unique_id: String? = null,
     var category: String? = null,
     var status: String? = null,
     var item_type: String? = null,
     var collections: String? = null,
-    var deadline: String? = null,
     @Column(name = "author_link", insertable = false, updatable = false)
-    var author_link: String? = null,
-    var nft_link: String? = null,
-    var bid_link: String? = null,
     var title: String? = null,
     var price: Double = 0.0,
-    var bid: Int = 0,
-    var max_bid: Int = 0,
-    var likes: Int = 0,
-    var description: String? = null,
-    var views: Int = 0,
-    var priceover: Double = 0.0,
-    @Column(name = "author", insertable = false, updatable = false)
-    var author: Int = 0,
-    var showcase: Boolean = false,
-    @Column(name = "published_at", insertable = false, updatable = false)
-    var published_at: Date? = null,
-    @CreationTimestamp
-    var created_at: Date? = null,
-    var updated_at: Date? = null,
 
-    ) {
+    var description: String? = null,
+    var priceover: Double = 0.0,
+    var showcase: Boolean = false, ) {
+
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var nftId: Int = 0
+    var deadline: String? = null
+    var author_link: String? = null
+    var bid: Int = 0
+    var max_bid: Int = 0
+    var likes: Int = 0
+
+    var views: Int = 0
+    @Column(name = "published_at", insertable = false, updatable = false)
+    var published_at: Date? = null
+    @CreationTimestamp
+    var created_at: Date? = null
+    @UpdateTimestamp
+    var updated_at: Date? = null
+    var nft_link: String? = null
+    var bid_link: String? = null
+    @Column(name = "author", insertable = false, updatable = false)
+    var author: Int = 0
     override fun hashCode(): Int = javaClass.hashCode()
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

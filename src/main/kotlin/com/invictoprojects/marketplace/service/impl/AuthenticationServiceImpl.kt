@@ -7,7 +7,8 @@ import com.invictoprojects.marketplace.dto.RefreshTokenRequest
 import com.invictoprojects.marketplace.dto.RegisterRequest
 import com.invictoprojects.marketplace.service.AuthenticationService
 import com.invictoprojects.marketplace.service.RefreshTokenService
-import com.invictoprojects.marketplace.service.UserService
+import com.invictoprojects.marketplace.service.impl.user.UserInformationService
+import com.invictoprojects.marketplace.service.impl.user.UserService
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication

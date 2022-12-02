@@ -2,6 +2,7 @@ package com.invictoprojects.marketplace.persistence.model.user.extended
 
 import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import java.util.*
 import javax.persistence.*
 
@@ -17,12 +18,12 @@ class HotCollection(
     var published_at: Date? = null,
     @CreationTimestamp
     var created_at: Date? = null,
+    @UpdateTimestamp
     var updated_at: Date? = null,
 ) {
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "id")
     open var banner: Banner? = null
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -20,7 +20,6 @@ data class PreviewImageDto(
     var previewUrl: String? = null,
     var provider: String? = null,
     var provider_metadata: String? = null,
-    var updated_at: Date? = null,
     var formats: Formats? = null,
     var userInformation: UserInformation? = null
 

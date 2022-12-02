@@ -2,11 +2,9 @@ package com.invictoprojects.marketplace.controller
 
 import com.invictoprojects.marketplace.dto.MappingUtils
 import com.invictoprojects.marketplace.dto.UserDto
-import com.invictoprojects.marketplace.dto.UserInformationDto
 import com.invictoprojects.marketplace.persistence.model.User
-import com.invictoprojects.marketplace.persistence.model.user.UserInformation
-import com.invictoprojects.marketplace.service.UserService
-import org.springframework.http.HttpStatus
+import com.invictoprojects.marketplace.service.impl.user.UserService
+import org.springframework.context.annotation.Role
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,12 +25,6 @@ class UserController(
         user.id = id
         val result = userService.update(user)
         return ResponseEntity.ok().body(result)
-    }
-
-    @PutMapping("/update/info")
-    fun updateUserInformation(@RequestBody userDto: UserInformationDto): ResponseEntity<HttpStatus> {
-        userService.updateByDto(userDto)
-        return ResponseEntity.ok().body(HttpStatus.ACCEPTED)
     }
 
     @PostMapping("/disable/{id}")

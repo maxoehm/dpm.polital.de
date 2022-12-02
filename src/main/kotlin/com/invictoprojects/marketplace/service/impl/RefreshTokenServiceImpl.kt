@@ -4,7 +4,7 @@ import com.invictoprojects.marketplace.exception.InvalidCredentialsException
 import com.invictoprojects.marketplace.persistence.model.RefreshToken
 import com.invictoprojects.marketplace.persistence.repository.RefreshTokenRepository
 import com.invictoprojects.marketplace.service.RefreshTokenService
-import com.invictoprojects.marketplace.service.UserService
+import com.invictoprojects.marketplace.service.impl.user.UserService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

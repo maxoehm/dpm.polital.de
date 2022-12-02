@@ -44,8 +44,9 @@ class Banner(
     @Column(name = "url", insertable = false, updatable = false)
     var updated_at: Date? = null,
 
-    @Embedded
-    var formats: Formats? = null) {
+    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "id")
+    open var formats: Formats? = null) {
 
 
 

@@ -3,6 +3,7 @@ package com.invictoprojects.marketplace.service.impl
 import com.invictoprojects.marketplace.persistence.model.Role
 import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.persistence.repository.UserRepository
+import com.invictoprojects.marketplace.service.impl.user.UserServiceImpl
 import io.mockk.Runs
 import io.mockk.confirmVerified
 import io.mockk.every

@@ -7,7 +7,7 @@ import com.invictoprojects.marketplace.dto.ReviewCreationDto
 import com.invictoprojects.marketplace.dto.ReviewDto
 import com.invictoprojects.marketplace.service.ProductService
 import com.invictoprojects.marketplace.service.ReviewService
-import com.invictoprojects.marketplace.service.UserService
+import com.invictoprojects.marketplace.service.impl.user.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated

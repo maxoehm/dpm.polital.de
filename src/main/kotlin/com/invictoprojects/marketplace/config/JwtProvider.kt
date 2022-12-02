@@ -1,6 +1,6 @@
 package com.invictoprojects.marketplace.config
 
-import com.invictoprojects.marketplace.service.UserService
+import com.invictoprojects.marketplace.service.impl.user.UserService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.User
@@ -33,6 +33,7 @@ class JwtProvider(
             .expiresAt(Instant.now().plusMillis(jwtExpirationInMillis))
             .subject(email)
             .claim("scope", user.role.name)
+            .claim("id", user.id)
             .build()
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
     }

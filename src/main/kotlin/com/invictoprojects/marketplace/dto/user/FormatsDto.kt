@@ -7,8 +7,8 @@ import com.invictoprojects.marketplace.persistence.model.user.extended.formats.T
 import javax.persistence.Embedded
 
 data class FormatsDto(
-    var small: Small? = null,
-    var medium: Medium? = null,
-    var large: Large? = null,
-    var thumbnail: Thumbnail? = null
+    var small: Small,
+    var medium: Medium,
+    var large: Large,
+    var thumbnail: Thumbnail
 )

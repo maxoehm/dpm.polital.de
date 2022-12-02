@@ -36,10 +36,11 @@ class PreviewImage(
     @Column(name = "provider_metadaten", insertable = false, updatable = false)
     var provider_metadata: String? = null,
     // var created_at: Date? = null,
-    var updated_at: Date? = null) {
+    var updated_at: Date? = null,
 
-    @Embedded
-    var formats: Formats? = null
+    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "id")
+    open var formats: Formats? = null) {
 
     @ManyToOne
     @JoinColumn(name = "user_information_user_information_id")

@@ -34,8 +34,10 @@ class Avatar(
     // var created_at: Date? = null,
     @Column(name = "updated_at", insertable = false, updatable = false)
     var updated_at: Date? = null,
-    @Embedded
-    var formats: Formats? = null)
+
+    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "id")
+    open var formats: Formats? = null)
 {
 
 
@@ -45,4 +47,5 @@ class Avatar(
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "avatar_id", nullable = false)
     open var avatar_id: Long? = null
+
 }
