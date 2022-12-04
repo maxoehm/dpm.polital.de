@@ -17,7 +17,6 @@ import javax.validation.constraints.NotNull
 
 data class UserInformationDto(
 
-    @NotBlank
     var username: String? = null,
     var social: String? = null,
     var wallet: String? = null,

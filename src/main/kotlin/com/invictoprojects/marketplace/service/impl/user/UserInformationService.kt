@@ -6,11 +6,13 @@ import com.invictoprojects.marketplace.persistence.model.Role
 import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 import com.invictoprojects.marketplace.persistence.model.user.extended.Nft
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 
 interface UserInformationService {
 
 
-    fun update(user: UserInformation): UserInformation
+    fun update(user: UserInformationDto): ResponseEntity<HttpStatus>
 
     fun findById(id: Long): UserInformation?
 

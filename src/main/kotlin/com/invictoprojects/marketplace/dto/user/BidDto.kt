@@ -1,6 +1,7 @@
 package com.invictoprojects.marketplace.dto.user
 
 import com.invictoprojects.marketplace.persistence.model.user.UserInformation
+import org.springframework.lang.Nullable
 import java.util.*
 import javax.persistence.Column
 

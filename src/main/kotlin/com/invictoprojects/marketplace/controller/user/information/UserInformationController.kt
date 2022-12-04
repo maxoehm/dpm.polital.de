@@ -25,8 +25,7 @@ class UserInformationController(
      */
     @PutMapping("/update/info")
     fun updateUserInformation(@RequestBody userDto: UserInformationDto): ResponseEntity<HttpStatus> {
-        userInformationService.save(userDto)
-        return ResponseEntity.ok().body(HttpStatus.ACCEPTED)
+        return userInformationService.update(userDto)
     }
 
     //ToDo: Bid needs to be mapped to an nft

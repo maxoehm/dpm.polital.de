@@ -14,6 +14,7 @@ interface UserInformationRepository : CrudRepository<UserInformation, Long> {
     fun findByUsername(username: String?): Optional<UserInformation>
     fun findByEmail(email: String): Optional<UserInformation>
     fun existsByEmail(email: String): Boolean
+    fun existsByUsername(username: String): Boolean
 
 
 }

@@ -3,6 +3,7 @@ package com.invictoprojects.marketplace.persistence.model.user
 import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.persistence.model.user.extended.*
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import java.util.*
 import javax.persistence.*
 
@@ -18,9 +19,6 @@ class UserInformation (
     var followers: Int = 0,
     var about: String? = null,
     var published_at: Date? = null,
-    @CreationTimestamp
-    var created_at: Date? = null,
-    var updated_at: Date? = null,
 
     @OneToMany(mappedBy = "userInformation", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
     open var nfts: MutableList<Nft> = mutableListOf(),
@@ -46,6 +44,11 @@ class UserInformation (
     @JoinColumn(name = "avatar_id")
     open var avatar: Avatar? = null
 ) {
+
+    @CreationTimestamp
+    var created_at: Date? = null
+    @UpdateTimestamp
+    var updated_at: Date? = null
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

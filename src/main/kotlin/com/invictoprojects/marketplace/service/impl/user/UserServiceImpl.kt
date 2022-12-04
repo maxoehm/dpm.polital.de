@@ -53,6 +53,11 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
             role = current.role
             enabled = current.enabled
             passwordHash = current.passwordHash
+
+            userInformation?.user = user
+            userInformation = current.userInformation
+            id = current.id
+            userInformation!!.userInformationId = current.userInformation!!.userInformationId
         }
         return userRepository.save(user)
     }

@@ -51,7 +51,7 @@ class User(
     }
 
     @OneToOne(
-        cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH],
+        cascade = [CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH],
         orphanRemoval = true
     )
     @JoinColumn(name = "user_information_id")

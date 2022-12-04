@@ -13,6 +13,8 @@ import com.invictoprojects.marketplace.persistence.repository.UserInformationRep
 import com.invictoprojects.marketplace.persistence.repository.UserRepository
 import com.invictoprojects.marketplace.persistence.repository.user.*
 import com.invictoprojects.marketplace.service.impl.url.LinkUtils
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
@@ -29,7 +31,7 @@ class UserInformationServiceImpl(
     private val previewImageRepository: PreviewImageRepository,
     private val userService: UserService) : UserInformationService {
 
-    override fun update(user: UserInformation): UserInformation {
+    fun update(user: UserInformation): UserInformation {
         if (!userRepository.existsById(user.userInformationId!!)) {
             throw EntityNotFoundException("User with id ${user.userInformationId} does not exist")
         }
@@ -37,6 +39,7 @@ class UserInformationServiceImpl(
         return userInformationRepository.save(user)
     }
 
+    /*
     /**
      * Method to update existing user information
      */
@@ -48,6 +51,30 @@ class UserInformationServiceImpl(
             return user.userInformation
         }
         throw EntityNotFoundException("User with does not exist")
+    }
+
+     */
+
+    override fun update(userInfoDto: UserInformationDto): ResponseEntity<HttpStatus> {
+        val current = getCurrentUser()
+        val userInfo = MappingUtils.convertToEntity(userInfoDto)
+
+        current.userInformation?.apply {
+            email = current.email
+
+            if (!userInfo.username?.let { userInformationRepository.existsByUsername(it) }!!) {
+                username = userInfo.username
+            } else {
+                return ResponseEntity(HttpStatus.CONFLICT)
+            }
+
+            email = userInfo.email
+            wallet = userInfo.wallet
+            about = userInfo.about
+        }
+
+        userRepository.save(current)
+        return ResponseEntity.ok().body(HttpStatus.ACCEPTED)
     }
 
     override fun addNft(nftDto: NftDto) {
@@ -64,6 +91,7 @@ class UserInformationServiceImpl(
             //ToDo: Implement views
             nft_link = LinkUtils.getNftLink(nft.nftId)
             bid_link = LinkUtils.getBidLink(nft.bid)
+
         }
 
 
@@ -142,6 +170,10 @@ class UserInformationServiceImpl(
     override fun getCurrentUserInformation(): UserInformation {
         val email = SecurityContextHolder.getContext().authentication.name
         return userInformationRepository.findByUsername(email).get()
+    }
+
+    override fun save(userInfo: UserInformationDto): UserInformation? {
+        TODO("Not yet implemented")
     }
 
 }
