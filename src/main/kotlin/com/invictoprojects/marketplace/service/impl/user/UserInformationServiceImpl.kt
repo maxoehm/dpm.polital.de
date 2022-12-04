@@ -58,23 +58,26 @@ class UserInformationServiceImpl(
     override fun update(userInfoDto: UserInformationDto): ResponseEntity<HttpStatus> {
         val current = getCurrentUser()
         val userInfo = MappingUtils.convertToEntity(userInfoDto)
-
+        var usernameSuccess = true
         current.userInformation?.apply {
             email = current.email
-
-            if (!userInfo.username?.let { userInformationRepository.existsByUsername(it) }!!) {
-                username = userInfo.username
-            } else {
-                return ResponseEntity(HttpStatus.CONFLICT)
-            }
 
             email = userInfo.email
             wallet = userInfo.wallet
             about = userInfo.about
+
+            if (!userInfo.username?.let { userInformationRepository.existsByUsername(it) }!!) {
+                username = userInfo.username
+            } else {
+                usernameSuccess = false
+            }
         }
 
         userRepository.save(current)
-        return ResponseEntity.ok().body(HttpStatus.ACCEPTED)
+
+        return if (usernameSuccess) {
+            ResponseEntity.ok().body(HttpStatus.ACCEPTED)
+        } else ResponseEntity(HttpStatus.CONFLICT)
     }
 
     override fun addNft(nftDto: NftDto) {
