@@ -6,6 +6,7 @@ import com.invictoprojects.marketplace.service.impl.user.UserService
 import io.minio.*
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.io.File
 
 @Service
 class BannerStorageService (
@@ -19,26 +20,32 @@ class BannerStorageService (
         minioClient.putObject(
             PutObjectArgs.builder()
                 .bucket(bucketNameBanner).
-                `object`(getObjectName())
+                `object`(buildName(file))
                 .stream(file.inputStream, file.size, -1)
                 .contentType(file.contentType)
                 .build()
         )
     }
 
+    override fun buildName(file: MultipartFile): String {
+        return getUserId() + "." + file.contentType!!
+    }
+
+
+
     override fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse? {
         return minioClient.getObject(
-            GetObjectArgs.builder().bucket(bucketNameBanner).`object`(getObjectName()).build()
+            GetObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserId()).build()
         )
     }
 
     override fun removeObject(bucketName: String, objectName: String) {
         return minioClient.removeObject(
-            RemoveObjectArgs.builder().bucket(bucketNameBanner).`object`(getObjectName()).build()
+            RemoveObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserId()).build()
         )
     }
 
-    override fun getObjectName(): String {
+    override fun getUserId(): String {
         return userService.getCurrentUser().userInformation?.userInformationId.toString()
     }
 

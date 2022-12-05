@@ -9,7 +9,8 @@ interface StorageService {
     fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse?
     fun removeObject(bucketName: String, objectName: String)
 
-    fun getObjectName(): String
+    fun getUserId(): String
 
     fun uploadObject(file: MultipartFile)
+    fun buildName(file: MultipartFile): String
 }
