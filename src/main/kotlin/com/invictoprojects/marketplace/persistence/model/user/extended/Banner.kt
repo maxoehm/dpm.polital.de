@@ -38,7 +38,7 @@ class Banner(
     var previewUrl: String? = null,
     @Column(name = "provider", insertable = false, updatable = false)
     var provider: String? = null,
-        @Column(name = "provider_metadaten", insertable = false, updatable = false)
+    @Column(name = "provider_metadaten", insertable = false, updatable = false)
     var provider_metadata: String? = null,
     // var created_at: Date? = null,
     @Column(name = "url", insertable = false, updatable = false)

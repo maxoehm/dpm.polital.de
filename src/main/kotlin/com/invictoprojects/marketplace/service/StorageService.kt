@@ -7,7 +7,8 @@ import org.springframework.web.multipart.MultipartFile
 interface StorageService {
 
     fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse?
-    fun removeObject(bucketName: String, objectName: String)
+    fun getUserBannerObject(): GetObjectResponse?
+    fun removeObject()
 
     fun getUserId(): String
 

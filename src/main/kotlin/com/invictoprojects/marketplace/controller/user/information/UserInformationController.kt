@@ -2,22 +2,24 @@ package com.invictoprojects.marketplace.controller.user.information
 
 import com.invictoprojects.marketplace.dto.UserInformationDto
 import com.invictoprojects.marketplace.dto.user.*
+import com.invictoprojects.marketplace.persistence.model.user.extended.Banner
+import com.invictoprojects.marketplace.service.impl.storage.BannerStorageService
 import com.invictoprojects.marketplace.service.impl.user.UserInformationService
 import com.invictoprojects.marketplace.service.impl.user.UserService
+import com.invictoprojects.marketplace.utils.FileTypeDefinitions
+import com.invictoprojects.marketplace.utils.FileUtils
 import org.springframework.context.annotation.Role
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/users/e/")
 @Role(0)
 class UserInformationController(
-    private val userInformationService: UserInformationService
+    private val userInformationService: UserInformationService,
+    private val bannerStorageService: BannerStorageService
     ) {
 
     /**
@@ -57,6 +59,16 @@ class UserInformationController(
     fun addPreviewImage(@RequestBody previewImageDto: PreviewImageDto): ResponseEntity<HttpStatus> {
         userInformationService.addPreviewImage(previewImageDto)
         return ResponseEntity.ok().body(HttpStatus.ACCEPTED)
+    }
+
+    @PostMapping("/commit/banner")
+    fun uploadBanner(
+        @RequestParam("file") file: MultipartFile
+    ): ResponseEntity<HttpStatus> {
+        return if (FileUtils.isType(file, FileTypeDefinitions.Filetype.IMAGE)) {
+            bannerStorageService.uploadObject(file)
+            ResponseEntity(HttpStatus.OK)
+        } else ResponseEntity(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     }
 
 }

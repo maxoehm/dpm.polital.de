@@ -17,6 +17,11 @@ class BannerStorageService (
     private final val bucketNameBanner = "users.banners"
 
     override fun uploadObject(file: MultipartFile) {
+
+       if (getUserBannerObject() != null) {
+           removeObject()
+       }
+
         minioClient.putObject(
             PutObjectArgs.builder()
                 .bucket(bucketNameBanner).
@@ -31,15 +36,19 @@ class BannerStorageService (
         return getUserId() + "." + file.contentType!!
     }
 
-
-
     override fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse? {
         return minioClient.getObject(
             GetObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserId()).build()
         )
     }
 
-    override fun removeObject(bucketName: String, objectName: String) {
+    override fun getUserBannerObject(): GetObjectResponse? {
+        return minioClient.getObject(
+            GetObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserId()).build()
+        )
+    }
+
+    override fun removeObject() {
         return minioClient.removeObject(
             RemoveObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserId()).build()
         )
