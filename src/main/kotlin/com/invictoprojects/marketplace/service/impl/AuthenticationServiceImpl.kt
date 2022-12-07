@@ -31,7 +31,6 @@ class AuthenticationServiceImpl(
     @Transactional
     override fun signup(registerRequest: RegisterRequest) {
         userService.create(
-            registerRequest.username,
             registerRequest.email,
             passwordEncoder.encode(registerRequest.password)
         )
@@ -47,6 +46,7 @@ class AuthenticationServiceImpl(
         )
         SecurityContextHolder.getContext().authentication = authenticate
         val email = authenticate.name
+
         val token = jwtProvider.generateToken(authenticate)
         val refreshToken = refreshTokenService.generateRefreshToken(email).token
         val userInformationMin = UserInformationMin.fromUserInformation(userService.getCurrentUser().userInformation)

@@ -59,7 +59,6 @@ object MappingUtils {
 
     fun convertToEntity(userDto: UserDto): User {
         return User(
-            username = userDto.username,
             email = userDto.email,
             subscribed = userDto.subscribed
         )
@@ -67,7 +66,6 @@ object MappingUtils {
 
     private fun convertToDto(user: User): UserDto {
         return UserDto(
-            username = user.username,
             email = user.email,
             subscribed = user.subscribed
         )

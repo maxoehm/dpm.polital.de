@@ -15,6 +15,7 @@ import com.invictoprojects.marketplace.persistence.repository.user.*
 import com.invictoprojects.marketplace.service.impl.url.LinkUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
@@ -165,7 +166,9 @@ class UserInformationServiceImpl(
     }
 
     override fun getCurrentUser(): User {
-        val email = SecurityContextHolder.getContext().authentication.name
+        val authentication: Authentication = SecurityContextHolder.getContext().authentication
+        val email = authentication.name
+
         return userRepository.findByEmail(email)
             ?: throw EntityNotFoundException("User with email $email does not exist")
     }

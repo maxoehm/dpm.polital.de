@@ -8,7 +8,6 @@ import javax.validation.constraints.Email
 @Entity
 @Table(name = "users")
 class User(
-    var username: String,
     @Email var email: String,
     @Column(name = "password_hash") var passwordHash: String? = null,
     @Column(name = "created_date") var createdDate: Instant? = null,
@@ -26,7 +25,6 @@ class User(
 
         other as User
 
-        if (username != other.username) return false
         if (email != other.email) return false
         if (passwordHash != other.passwordHash) return false
         if (createdDate != other.createdDate) return false
@@ -39,8 +37,7 @@ class User(
     }
 
     override fun hashCode(): Int {
-        var result = username.hashCode()
-        result = 31 * result + email.hashCode()
+        var result = email.hashCode()
         result = 31 * result + (passwordHash?.hashCode() ?: 0)
         result = 31 * result + (createdDate?.hashCode() ?: 0)
         result = 31 * result + role.hashCode()

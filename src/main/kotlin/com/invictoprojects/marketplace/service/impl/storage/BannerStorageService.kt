@@ -21,7 +21,6 @@ class BannerStorageService (
        if (getUserBannerObject() != null) {
            removeObject()
        }
-
         minioClient.putObject(
             PutObjectArgs.builder()
                 .bucket(bucketNameBanner).

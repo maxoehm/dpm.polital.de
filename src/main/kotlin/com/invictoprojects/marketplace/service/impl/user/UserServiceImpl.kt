@@ -7,6 +7,8 @@ import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 import com.invictoprojects.marketplace.persistence.repository.UserInformationRepository
 import com.invictoprojects.marketplace.persistence.repository.UserRepository
+import com.invictoprojects.marketplace.service.impl.AuthenticationServiceImpl
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,11 +18,12 @@ import javax.persistence.EntityNotFoundException
 @Service
 class UserServiceImpl(private val userRepository: UserRepository) : UserService {
 
-    override fun create(username: String, email: String, passwordHash: String): User {
+    override fun create(email: String, passwordHash: String): User {
+
         if (userRepository.existsByEmail(email)) {
             throw IllegalArgumentException("User with email $email already exists")
         }
-        val user = User(username, email, passwordHash, Instant.now(), Role.USER, true)
+        val user = User(email, passwordHash, Instant.now(), Role.USER, true)
         user.userInformation = genUserInformationEntity(user)
         return userRepository.save(user)
     }
@@ -70,7 +73,11 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         return userRepository.findAll()
     }
 
+    //get logger
+    val logger = org.slf4j.LoggerFactory.getLogger(AuthenticationServiceImpl::class.java)
+
     override fun findByEmail(email: String): User? {
+
         if (!userRepository.existsByEmail(email)) {
             throw EntityNotFoundException("User with email $email does not exist")
         } else {
@@ -118,7 +125,9 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
     }
 
     override fun getCurrentUser(): User {
-        val email = SecurityContextHolder.getContext().authentication.name
+        val authentication: Authentication = SecurityContextHolder.getContext().authentication
+        val email = authentication.name
+
         return userRepository.findByEmail(email)
             ?: throw EntityNotFoundException("User with email $email does not exist")
     }

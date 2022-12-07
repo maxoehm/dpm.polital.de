@@ -59,7 +59,7 @@ class JwtProvider(
         try {
             return JWT.create()
                 .withIssuer("invicto")
-                .withSubject(user.username)
+                .withSubject(user.email)
                 .withClaim("verified", user.enabled)
                 .withClaim("user_id", user.id)
                 .withClaim("scope", user.role.name)
