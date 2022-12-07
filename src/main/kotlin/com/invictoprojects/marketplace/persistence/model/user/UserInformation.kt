@@ -19,7 +19,7 @@ class UserInformation (
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "user_information_id", nullable = false)
      var id: Long? = null,
 
     @ManyToOne
