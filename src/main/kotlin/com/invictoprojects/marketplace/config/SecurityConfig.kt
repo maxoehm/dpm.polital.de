@@ -8,6 +8,12 @@ import com.auth0.jwt.exceptions.JWTCreationException
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.Claim
 import com.auth0.jwt.interfaces.DecodedJWT
+import com.nimbusds.jose.jwk.JWK
+import com.nimbusds.jose.jwk.JWKSet
+import com.nimbusds.jose.jwk.RSAKey
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet
+import com.nimbusds.jose.jwk.source.JWKSource
+import com.nimbusds.jose.proc.SecurityContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -25,17 +31,18 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.oauth2.jwt.JwtValidationException
+import org.springframework.security.oauth2.jwt.*
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.time.Instant
+import javax.persistence.PostLoad
 
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig : WebSecurityConfigurerAdapter() {
+class SecurityConfig() : WebSecurityConfigurerAdapter() {
 
     @Autowired
     var userDetailsService: UserDetailsService? = null
@@ -96,21 +103,32 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             .passwordEncoder(passwordEncoder())
     }
 
-    private final val algorithm: Algorithm = Algorithm.RSA256(publicKey, privateKey)
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
     }
 
+    @Bean
+    fun jwtDecoder(): JwtDecoder {
+        return NimbusJwtDecoder.withPublicKey(publicKey).build()
+    }
+
+    @Bean
+    fun jwtEncoder(): JwtEncoder {
+        val jwk: JWK = RSAKey.Builder(publicKey).privateKey(privateKey).build()
+        val jwks: JWKSource<SecurityContext> = ImmutableJWKSet(JWKSet(jwk))
+        return NimbusJwtEncoder(jwks)
+    }
 
     fun jwtDecoder(token: String): DecodedJWT? {
+        val algorithm: Algorithm = Algorithm.RSA256(publicKey, privateKey)
         val decodedJWT: DecodedJWT? = null
         try {
             val verifier: JWTVerifier = JWT.require(algorithm) // specify an specific claim validations
                 .withIssuer("invicto") // reusable verifier instance
                 .build()
-           val decodedJWT = verifier.verify(token);
+            val decodedJWT = verifier.verify(token);
         } catch (_: JWTVerificationException) { }
 
         return decodedJWT
@@ -118,6 +136,8 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 
 
     fun jwtEncoder(username: String, verified: Boolean, userId: Long): String? {
+        val algorithm: Algorithm = Algorithm.RSA256(publicKey, privateKey)
+
         try {
             return JWT.create()
                 .withIssuer("invicto")

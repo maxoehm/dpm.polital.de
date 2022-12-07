@@ -7,26 +7,21 @@ import com.invictoprojects.marketplace.persistence.model.user.extended.formats.T
 import javax.persistence.*
 
 @Entity
-class Formats() {
-
+class Formats(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    open var id: Long? = null
+    open var id: Long? = null,
 
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "small_id")
-    open var small: Small? = null
+    @Embedded
+    var small: Small? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "medium_id")
-    open var medium: Medium? = null
+    @Embedded
+    var medium: Medium? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "large_id")
-    open var large: Large? = null
+    @Embedded
+    var large: Large? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "thumbnail_id")
-    open var thumbnail: Thumbnail? = null
+    @Embedded
+    var thumbnail: Thumbnail? = null) {
 }

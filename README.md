@@ -16,6 +16,7 @@ The project was developed using the SpringBoot ecosystem, including Spring REST 
 * Kotlin
 * Maven - Dependency Management
 * PostgreSQL - Database System
+* MINIO - Object Storage
 * Spring Boot Ecosystem
 #### Dev dependencies
 * JUnit - Testing Framework

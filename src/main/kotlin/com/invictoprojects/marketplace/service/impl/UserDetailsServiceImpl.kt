@@ -1,7 +1,7 @@
 package com.invictoprojects.marketplace.service.impl
 
 import com.invictoprojects.marketplace.persistence.model.User
-import com.invictoprojects.marketplace.service.UserService
+import com.invictoprojects.marketplace.service.impl.user.UserService
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -26,11 +26,13 @@ class UserDetailsServiceImpl(val userService: UserService) : UserDetailsService 
             true,
             true,
             true,
-            getAuthorities(user)
+            getAuthorities(user),
         )
     }
 
     private fun getAuthorities(user: User): Collection<GrantedAuthority?> {
-        return listOf(SimpleGrantedAuthority("SCOPE_" + user.role.name))
+        return listOf(
+            SimpleGrantedAuthority("SCOPE_" + user.role.name),
+        )
     }
 }

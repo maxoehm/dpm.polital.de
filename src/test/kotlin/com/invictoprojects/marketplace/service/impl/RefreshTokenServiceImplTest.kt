@@ -5,7 +5,7 @@ import com.invictoprojects.marketplace.persistence.model.RefreshToken
 import com.invictoprojects.marketplace.persistence.model.Role
 import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.persistence.repository.RefreshTokenRepository
-import com.invictoprojects.marketplace.service.UserService
+import com.invictoprojects.marketplace.service.impl.user.UserService
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs

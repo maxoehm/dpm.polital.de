@@ -3,6 +3,7 @@ package com.invictoprojects.marketplace.service.impl
 import com.invictoprojects.marketplace.persistence.model.Role
 import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.persistence.repository.UserRepository
+import com.invictoprojects.marketplace.service.impl.user.UserServiceImpl
 import io.mockk.Runs
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -30,7 +31,6 @@ internal class UserServiceImplTest {
     @Test
     fun create_UserExists_ThrowException() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -39,7 +39,7 @@ internal class UserServiceImplTest {
         every { userRepository.existsByEmail(user.email) } returns true
         every { userRepository.save(user) } returnsArgument 0
 
-        assertThrows<IllegalArgumentException> { userService.create(user.username, user.email, user.passwordHash!!) }
+        assertThrows<IllegalArgumentException> { userService.create(user.email, user.passwordHash!!) }
 
         verify { userRepository.existsByEmail(user.email) }
         verify(exactly = 0) { userRepository.save(user) }
@@ -49,7 +49,6 @@ internal class UserServiceImplTest {
     @Test
     fun update_ReturnUser() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -72,7 +71,6 @@ internal class UserServiceImplTest {
     @Test
     fun update_UserNotExists_ThrowException() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -91,7 +89,6 @@ internal class UserServiceImplTest {
     @Test
     fun delete() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -110,7 +107,6 @@ internal class UserServiceImplTest {
     @Test
     fun delete_UserNotExists_ThrowException() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -129,7 +125,6 @@ internal class UserServiceImplTest {
     @Test
     fun findAll_ReturnAllUsers() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -148,7 +143,6 @@ internal class UserServiceImplTest {
     @Test
     fun findById_ReturnUser() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -169,7 +163,6 @@ internal class UserServiceImplTest {
     @Test
     fun findById_UserNotExists_ThrowException() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -188,7 +181,6 @@ internal class UserServiceImplTest {
     @Test
     fun findByEmail_ReturnUser() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -209,7 +201,6 @@ internal class UserServiceImplTest {
     @Test
     fun findByEmail_UserNotExists_ThrowException() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -228,7 +219,6 @@ internal class UserServiceImplTest {
     @Test
     fun updatePasswordHash_ReturnUser() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -249,7 +239,6 @@ internal class UserServiceImplTest {
     @Test
     fun updatePasswordHash_UserNotExists_ThrowException() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -270,7 +259,6 @@ internal class UserServiceImplTest {
     @Test
     fun updateRole_ReturnUser() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -291,7 +279,6 @@ internal class UserServiceImplTest {
     @Test
     fun updateRole_UserNotExists_ThrowException() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -312,7 +299,6 @@ internal class UserServiceImplTest {
     @Test
     fun disableById_IdValid_UserDisabled() {
         val user = User(
-            username = "user",
             email = "user@gmail.com",
             passwordHash = "passwordHash",
             id = 1
@@ -330,7 +316,6 @@ internal class UserServiceImplTest {
 
         confirmVerified(userRepository)
         assertEquals(false, savedUser.enabled)
-        assertEquals("user", savedUser.username)
         assertEquals("user@gmail.com", savedUser.email)
         assertEquals("passwordHash", savedUser.passwordHash)
     }

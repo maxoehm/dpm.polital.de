@@ -1,10 +1,12 @@
-package com.invictoprojects.marketplace.service
+package com.invictoprojects.marketplace.service.impl.user
 
+import com.invictoprojects.marketplace.dto.UserInformationDto
 import com.invictoprojects.marketplace.persistence.model.Role
 import com.invictoprojects.marketplace.persistence.model.User
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 
 interface UserService {
-    fun create(username: String, email: String, passwordHash: String): User
+    fun create(email: String, passwordHash: String): User
 
     fun delete(user: User)
 
@@ -25,4 +27,6 @@ interface UserService {
     fun getCurrentUser(): User
 
     fun findAllBySubscribedIsTrue(): MutableIterable<User>
+
+    fun updateInformation(user: User)
 }

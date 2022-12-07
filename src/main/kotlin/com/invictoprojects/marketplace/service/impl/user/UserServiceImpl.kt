@@ -1,9 +1,14 @@
-package com.invictoprojects.marketplace.service.impl
+package com.invictoprojects.marketplace.service.impl.user
 
+import com.invictoprojects.marketplace.dto.MappingUtils
+import com.invictoprojects.marketplace.dto.UserInformationDto
 import com.invictoprojects.marketplace.persistence.model.Role
 import com.invictoprojects.marketplace.persistence.model.User
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
+import com.invictoprojects.marketplace.persistence.repository.UserInformationRepository
 import com.invictoprojects.marketplace.persistence.repository.UserRepository
-import com.invictoprojects.marketplace.service.UserService
+import com.invictoprojects.marketplace.service.impl.AuthenticationServiceImpl
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,12 +18,21 @@ import javax.persistence.EntityNotFoundException
 @Service
 class UserServiceImpl(private val userRepository: UserRepository) : UserService {
 
-    override fun create(username: String, email: String, passwordHash: String): User {
+    override fun create(email: String, passwordHash: String): User {
+
         if (userRepository.existsByEmail(email)) {
             throw IllegalArgumentException("User with email $email already exists")
         }
-        val user = User(username, email, passwordHash, Instant.now(), Role.USER, true)
+        val user = User(email, passwordHash, Instant.now(), Role.USER, true)
+        user.userInformation = genUserInformationEntity(user)
         return userRepository.save(user)
+    }
+
+    fun genUserInformationEntity(user: User): UserInformation {
+        val userInformation = UserInformation()
+        userInformation.email = user.email
+        userInformation.user = user
+        return userInformation
     }
 
     override fun delete(user: User) {
@@ -42,15 +56,28 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
             role = current.role
             enabled = current.enabled
             passwordHash = current.passwordHash
+
+            userInformation?.user = user
+            userInformation = current.userInformation
+            id = current.id
+            userInformation!!.userInformationId = current.userInformation!!.userInformationId
         }
         return userRepository.save(user)
+    }
+
+    override fun updateInformation(user: User) {
+        userRepository.save(user)
     }
 
     override fun findAll(): MutableIterable<User> {
         return userRepository.findAll()
     }
 
+    //get logger
+    val logger = org.slf4j.LoggerFactory.getLogger(AuthenticationServiceImpl::class.java)
+
     override fun findByEmail(email: String): User? {
+
         if (!userRepository.existsByEmail(email)) {
             throw EntityNotFoundException("User with email $email does not exist")
         } else {
@@ -98,7 +125,9 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
     }
 
     override fun getCurrentUser(): User {
-        val email = SecurityContextHolder.getContext().authentication.name
+        val authentication: Authentication = SecurityContextHolder.getContext().authentication
+        val email = authentication.name
+
         return userRepository.findByEmail(email)
             ?: throw EntityNotFoundException("User with email $email does not exist")
     }

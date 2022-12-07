@@ -5,9 +5,11 @@ import com.invictoprojects.marketplace.dto.AuthenticationResponse
 import com.invictoprojects.marketplace.dto.LoginRequest
 import com.invictoprojects.marketplace.dto.RefreshTokenRequest
 import com.invictoprojects.marketplace.dto.RegisterRequest
+import com.invictoprojects.marketplace.persistence.model.user.UserInformationMin
 import com.invictoprojects.marketplace.service.AuthenticationService
 import com.invictoprojects.marketplace.service.RefreshTokenService
-import com.invictoprojects.marketplace.service.UserService
+import com.invictoprojects.marketplace.service.impl.user.UserInformationService
+import com.invictoprojects.marketplace.service.impl.user.UserService
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -29,7 +31,6 @@ class AuthenticationServiceImpl(
     @Transactional
     override fun signup(registerRequest: RegisterRequest) {
         userService.create(
-            registerRequest.username,
             registerRequest.email,
             passwordEncoder.encode(registerRequest.password)
         )
@@ -39,19 +40,24 @@ class AuthenticationServiceImpl(
     override fun login(loginRequest: LoginRequest): AuthenticationResponse {
         val authenticate: Authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
-                loginRequest.identifier,
+                loginRequest.email,
                 loginRequest.password
             )
         )
         SecurityContextHolder.getContext().authentication = authenticate
         val email = authenticate.name
+
         val token = jwtProvider.generateToken(authenticate)
         val refreshToken = refreshTokenService.generateRefreshToken(email).token
+        val userInformationMin = UserInformationMin.fromUserInformation(userService.getCurrentUser().userInformation)
+
         return AuthenticationResponse(
             token,
             refreshToken,
             Instant.now().plusMillis(jwtProvider.jwtExpirationInMillis),
-            email
+            email,
+            userService.getCurrentUser().userInformation?.userInformationId!!,
+            userInformationMin
         )
     }
 
@@ -59,11 +65,14 @@ class AuthenticationServiceImpl(
     override fun refreshToken(refreshTokenRequest: RefreshTokenRequest): AuthenticationResponse {
         refreshTokenService.validateRefreshToken(refreshTokenRequest.refreshToken, refreshTokenRequest.email)
         val token = jwtProvider.jwtEncoder(refreshTokenRequest.email)
+        val userInformationMin = UserInformationMin.fromUserInformation(userService.getCurrentUser().userInformation)
         return AuthenticationResponse(
             token,
             refreshTokenRequest.refreshToken,
             Instant.now().plusMillis(jwtProvider.jwtExpirationInMillis),
-            refreshTokenRequest.email
+            refreshTokenRequest.email,
+            userService.getCurrentUser().userInformation?.userInformationId!!,
+            userInformationMin
         )
     }
 }

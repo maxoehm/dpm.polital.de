@@ -7,29 +7,24 @@ import javax.validation.constraints.Email
 
 @Entity
 @Table(name = "users")
-class User (
-    var username: String,
+class User(
     @Email var email: String,
     @Column(name = "password_hash") var passwordHash: String? = null,
     @Column(name = "created_date") var createdDate: Instant? = null,
     @Column(name = "role_type") var role: Role = Role.USER,
-    @Column(name = "user_information")
     var enabled: Boolean = false,
     var subscribed: Boolean = true,
     @Id @GeneratedValue
-    var id: Long? = null,
-    @OneToOne(cascade = [CascadeType.PERSIST], optional = false, orphanRemoval = true)
-    @JoinColumn(name = "user_information_id", referencedColumnName = "user_information_id", nullable = false)
-    open var userInformation: UserInformation? = UserInformation()
-) {
+    var id: Long? = null
 
+
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as User
 
-        if (username != other.username) return false
         if (email != other.email) return false
         if (passwordHash != other.passwordHash) return false
         if (createdDate != other.createdDate) return false
@@ -42,8 +37,7 @@ class User (
     }
 
     override fun hashCode(): Int {
-        var result = username.hashCode()
-        result = 31 * result + email.hashCode()
+        var result = email.hashCode()
         result = 31 * result + (passwordHash?.hashCode() ?: 0)
         result = 31 * result + (createdDate?.hashCode() ?: 0)
         result = 31 * result + role.hashCode()
@@ -52,5 +46,12 @@ class User (
         result = 31 * result + (id?.hashCode() ?: 0)
         return result
     }
+
+    @OneToOne(
+        cascade = [CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH],
+        orphanRemoval = true
+    )
+    @JoinColumn(name = "user_information_id")
+    var userInformation: UserInformation? = null
 
 }
