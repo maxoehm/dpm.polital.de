@@ -64,7 +64,7 @@ class AuthenticationServiceImpl(
     @Transactional
     override fun refreshToken(refreshTokenRequest: RefreshTokenRequest): AuthenticationResponse {
         refreshTokenService.validateRefreshToken(refreshTokenRequest.refreshToken, refreshTokenRequest.email)
-        val token = jwtProvider.generateTokenWithEmail(refreshTokenRequest.email)
+        val token = jwtProvider.jwtEncoder(refreshTokenRequest.email)
         val userInformationMin = UserInformationMin.fromUserInformation(userService.getCurrentUser().userInformation)
         return AuthenticationResponse(
             token,
