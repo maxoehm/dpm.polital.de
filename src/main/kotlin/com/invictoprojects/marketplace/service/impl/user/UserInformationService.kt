@@ -34,4 +34,5 @@ interface UserInformationService {
 
     fun addPreviewImage(previewImageDto: PreviewImageDto)
 
+    fun setBanner(extension: String)
 }

@@ -1,13 +1,14 @@
 package com.invictoprojects.marketplace.config
 
 import io.minio.MinioClient
-import io.minio.ServerSideEncryption
-import io.minio.ServerSideEncryptionCustomerKey
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.MediaType
+import org.springframework.http.converter.ByteArrayHttpMessageConverter
+import org.springframework.http.converter.HttpMessageConverter
 import java.nio.file.*
-import javax.crypto.KeyGenerator
+
 
 @Configuration
 class MinIOConfig {
@@ -31,7 +32,6 @@ class MinIOConfig {
 
     @Bean
     fun encryptionKey() { }
-
 
 
 }
