@@ -16,4 +16,5 @@ interface StorageService {
     fun getUserIdWithExtension(): String
     fun uploadObject(file: MultipartFile): InputStream
     fun hasBanner(): Boolean
+    fun getUserBannerUrl(): String
 }

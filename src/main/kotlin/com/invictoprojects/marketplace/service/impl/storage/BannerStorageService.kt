@@ -5,15 +5,15 @@ import com.invictoprojects.marketplace.service.StorageService
 import com.invictoprojects.marketplace.service.impl.user.UserInformationServiceImpl
 import com.invictoprojects.marketplace.service.impl.user.UserService
 import io.minio.*
-import io.minio.errors.ErrorResponseException
+import io.minio.http.Method
 import org.apache.commons.io.FilenameUtils
 import org.slf4j.LoggerFactory
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.*
+
 
 @Service
 class BannerStorageService (
@@ -57,6 +57,17 @@ class BannerStorageService (
             return Optional.of(inStream)
 
         //ToDo: Make return default image
+    }
+
+    override fun getUserBannerUrl(): String {
+        return minioClient.getPresignedObjectUrl(
+            GetPresignedObjectUrlArgs.builder()
+                .method(Method.DELETE)
+                .bucket(bucketNameBanner)
+                .`object`(getUserIdWithExtension())
+                .expiry(7 * 24 * 60 * 60)
+                .build()
+        )
     }
 
     override fun removeObject() {

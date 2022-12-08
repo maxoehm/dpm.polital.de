@@ -27,11 +27,20 @@ class ProfileFileUploadController(
         } else ResponseEntity(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     }
 
+    /**
+     * Endpoint returns image of user banner as byte array
+     */
     @GetMapping("/get/banner", produces = [MediaType.IMAGE_PNG_VALUE])
     @ResponseBody
     fun getBanner(): ResponseEntity<ByteArray> {
         return ResponseEntity(IOUtils.toByteArray(storageService.getUserBannerObject().get()), HttpStatus.OK)
     }
+
+    @GetMapping("/get/banner/url")
+    fun getBannerUrl(): String {
+        return storageService.getUserBannerUrl()
+    }
+
 
 
 }
