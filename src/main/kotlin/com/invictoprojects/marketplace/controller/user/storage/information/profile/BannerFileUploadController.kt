@@ -13,12 +13,12 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/users/profile")
-class ProfileFileUploadController(
-    @Qualifier("profileStorageService") private val storageService: StorageService
+class BannerFileUploadController(
+    @Qualifier("bannerStorageService") private val storageService: StorageService
 ) {
 
-    @PostMapping("/upload/profile", produces = [MediaType.IMAGE_PNG_VALUE])
-    fun uploadprofile(
+    @PostMapping("/upload/banner", produces = [MediaType.IMAGE_PNG_VALUE])
+    fun uploadBanner(
         @RequestParam("file") file: MultipartFile): ResponseEntity<ByteArray> {
         return if (FileUtils.isType(file, FileTypeDefinitions.Filetype.IMAGE)) {
             val e = storageService.uploadObject(file)
@@ -27,21 +27,23 @@ class ProfileFileUploadController(
     }
 
     /**
-     * Endpoint returns image of user profile as byte array
+     * Endpoint returns image of user banner as byte array
      */
-    @GetMapping("/get/profile", produces = [MediaType.IMAGE_PNG_VALUE])
+    @GetMapping("/get/banner", produces = [MediaType.IMAGE_PNG_VALUE])
     @ResponseBody
-    fun getprofile(): ResponseEntity<ByteArray> {
+    fun getBanner(): ResponseEntity<ByteArray> {
         return ResponseEntity(IOUtils.toByteArray(storageService.getObject().get()), HttpStatus.OK)
     }
 
-    @GetMapping("/get/profile/url")
-    fun getprofileUrl(): String {
+    @GetMapping("/get/banner/url")
+    fun getBannerUrl(): String {
         return try {
             storageService.getUrl()
         } catch (e: Exception) {
             "https://www.shutterstock.com/image-vector/no-signal-poster-colorful-error-260nw-1042680049.jpg"
         }
     }
+
+
 
 }
