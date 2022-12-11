@@ -38,7 +38,11 @@ class ProfileFileUploadController(
 
     @GetMapping("/get/banner/url")
     fun getBannerUrl(): String {
-        return storageService.getUserBannerUrl()
+        return try {
+            storageService.getUserBannerUrl()
+        } catch (e: Exception) {
+            "https://www.shutterstock.com/image-vector/no-signal-poster-colorful-error-260nw-1042680049.jpg"
+        }
     }
 
 

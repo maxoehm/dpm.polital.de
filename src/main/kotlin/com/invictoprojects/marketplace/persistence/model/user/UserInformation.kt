@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.util.*
 import javax.persistence.*
+import javax.validation.constraints.Size
 
 // version 2.11.1
 @Entity
@@ -50,6 +51,9 @@ class UserInformation (
 ) {
 
     var banner: String = ""
+    @Lob
+    @Size(max = 512)
+    var bannerUrl: String = ""
 
     @CreationTimestamp
     var created_at: Date? = null

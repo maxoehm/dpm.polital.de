@@ -23,6 +23,7 @@ class BannerStorageService (
 ) : StorageService {
 
     private final val bucketNameBanner = "users.banners"
+    private final val expiryConstant = 7 * 24 * 60 * 60 // 7 days
 
     override fun uploadObject(file: MultipartFile): InputStream {
         userInformationImpl.setBanner(FilenameUtils.getExtension(file.originalFilename));
@@ -44,14 +45,8 @@ class BannerStorageService (
 
 
     override fun getUserBannerObject(): Optional<InputStream> {
-        var logger = LoggerFactory.getLogger(BannerStorageService::class.java)
-
-        logger.info(getUserIdWithExtension())
-
-
         val byteArray = minioClient.getObject(
                 GetObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserIdWithExtension()).build()).readAllBytes()
-
 
             val inStream: InputStream = ByteArrayInputStream(byteArray)
             return Optional.of(inStream)
@@ -59,15 +54,28 @@ class BannerStorageService (
         //ToDo: Make return default image
     }
 
+    /**
+     * Endpoint returns image url
+     * ToDo: Make it return on upload
+     */
     override fun getUserBannerUrl(): String {
-        return minioClient.getPresignedObjectUrl(
+
+        val url = minioClient.getPresignedObjectUrl(
             GetPresignedObjectUrlArgs.builder()
-                .method(Method.DELETE)
+                .method(Method.GET)
                 .bucket(bucketNameBanner)
                 .`object`(getUserIdWithExtension())
-                .expiry(7 * 24 * 60 * 60)
+                .expiry(expiryConstant)
                 .build()
         )
+
+        /*
+        val usr = userService.getCurrentUser()
+        usr.userInformation?.bannerUrl = url
+        userService.updateInformation(usr)
+         */
+
+        return url
     }
 
     override fun removeObject() {

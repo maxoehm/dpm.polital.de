@@ -16,8 +16,6 @@ class User(
     var subscribed: Boolean = true,
     @Id @GeneratedValue
     var id: Long? = null
-
-
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
