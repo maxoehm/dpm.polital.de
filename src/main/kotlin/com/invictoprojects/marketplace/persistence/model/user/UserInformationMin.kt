@@ -15,7 +15,7 @@ class UserInformationMin(
     var about: String? = null,
     var published_at: Date? = null,
 
-    var banner: Banner? = null,
+    var banner: Boolean = false,
     var avatar: Avatar? = null,
 ) {
 
@@ -32,7 +32,6 @@ class UserInformationMin(
                 wallet = userInformation.wallet,
                 followers = userInformation.followers,
                 about = userInformation.about,
-                banner = userInformation.banner,
                 avatar = userInformation.avatar
             )
         }

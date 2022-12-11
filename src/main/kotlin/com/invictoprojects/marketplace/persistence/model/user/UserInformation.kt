@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.util.*
 import javax.persistence.*
+import javax.validation.constraints.Size
 
 // version 2.11.1
 @Entity
@@ -36,14 +37,23 @@ class UserInformation (
     @OneToMany(mappedBy = "userInformation", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
     open var bids: MutableList<Bid> = mutableListOf(),
 
+    /*
     @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
     @JoinColumn(name = "banner_user_info_id")
     var banner: Banner? = null,
+     */
+
+
 
     @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
     @JoinColumn(name = "avatar_id")
     open var avatar: Avatar? = null
 ) {
+
+    var banner: String = ""
+    @Lob
+    @Size(max = 512)
+    var bannerUrl: String = ""
 
     @CreationTimestamp
     var created_at: Date? = null

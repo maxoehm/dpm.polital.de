@@ -106,9 +106,7 @@ object MappingUtils {
         followers = userInfo.followers,
         about = userInfo.about,
         published_at = userInfo.published_at,
-        avatar = convertToEntity(userInfo.avatar),
-        banner = convertToEntity(userInfo.banner)
-        )
+        avatar = convertToEntity(userInfo.avatar))
         return user;
     }
 

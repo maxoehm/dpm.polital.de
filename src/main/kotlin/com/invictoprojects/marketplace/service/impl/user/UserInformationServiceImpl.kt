@@ -5,10 +5,7 @@ import com.invictoprojects.marketplace.dto.UserInformationDto
 import com.invictoprojects.marketplace.dto.user.*
 import com.invictoprojects.marketplace.persistence.model.User
 import com.invictoprojects.marketplace.persistence.model.user.UserInformation
-import com.invictoprojects.marketplace.persistence.model.user.extended.AuthorSale
-import com.invictoprojects.marketplace.persistence.model.user.extended.Bid
-import com.invictoprojects.marketplace.persistence.model.user.extended.Nft
-import com.invictoprojects.marketplace.persistence.model.user.extended.PreviewImage
+import com.invictoprojects.marketplace.persistence.model.user.extended.*
 import com.invictoprojects.marketplace.persistence.repository.UserInformationRepository
 import com.invictoprojects.marketplace.persistence.repository.UserRepository
 import com.invictoprojects.marketplace.persistence.repository.user.*
@@ -129,6 +126,12 @@ class UserInformationServiceImpl(
         bid.userInformation = user.userInformation
         user.userInformation?.bids?.add(bid)
         bidRepository.save(bid)
+        userService.updateInformation(user)
+    }
+
+    override fun setBanner(extension: String) {
+        val user = getCurrentUser()
+        user.userInformation?.banner = extension
         userService.updateInformation(user)
     }
 
