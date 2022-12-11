@@ -16,13 +16,13 @@ import java.util.*
 
 
 @Service
-class BannerStorageService (
+class NftStorageService (
     private val userService: UserService,
     private val userInformationImpl: UserInformationServiceImpl,
     private val minioClient: MinioClient = MinIOConfig().client()
 ) : StorageService {
 
-    private final val bucketNameBanner = "users.banners"
+    private final val bucketNameBanner = "users.nft"
     private final val expiryConstant = 7 * 24 * 60 * 60 // 7 days
 
     override fun uploadObject(file: MultipartFile): InputStream {

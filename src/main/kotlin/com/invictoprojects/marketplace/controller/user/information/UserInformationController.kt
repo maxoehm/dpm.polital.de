@@ -2,6 +2,7 @@ package com.invictoprojects.marketplace.controller.user.information
 
 import com.invictoprojects.marketplace.dto.UserInformationDto
 import com.invictoprojects.marketplace.dto.user.*
+import com.invictoprojects.marketplace.persistence.model.user.UserInformationMin
 import com.invictoprojects.marketplace.persistence.model.user.extended.Banner
 import com.invictoprojects.marketplace.service.impl.storage.BannerStorageService
 import com.invictoprojects.marketplace.service.impl.user.UserInformationService
@@ -25,9 +26,10 @@ class UserInformationController(
     /**
      * Intended for updating existing UserInformation data
      */
-    @PutMapping("/update/info")
-    fun updateUserInformation(@RequestBody userDto: UserInformationDto): ResponseEntity<HttpStatus> {
-        return userInformationService.update(userDto)
+    @PostMapping("/update/info")
+    fun updateUserInformation(@RequestBody userDto: UserInformationDto): ResponseEntity<UserInformationMin> {
+        userInformationService.update(userDto)
+        return ResponseEntity.ok().body(UserInformationMin.fromUserInformation(userInformationService.getCurrentUser().userInformation))
     }
 
     //ToDo: Bid needs to be mapped to an nft
