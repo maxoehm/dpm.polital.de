@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.*
+import kotlin.collections.HashMap
 
 
 @Service
@@ -27,17 +28,19 @@ class BannerStorageService (
 
     override fun uploadObject(file: MultipartFile): InputStream {
         userInformationImpl.setBanner(FilenameUtils.getExtension(file.originalFilename));
+        val tags = mutableMapOf<String, String>()
+        tags["user_id"] = userService.getCurrentUser().id.toString()
 
         minioClient.putObject(PutObjectArgs.builder()
             .bucket(bucketNameBanner).`object`(getUserIdWithExtension())
             .stream(file.inputStream, file.size, -1)
-            .contentType(file.contentType)
+            .contentType(file.contentType).tags(tags)
             .build())
 
         return getObject().get()
     }
 
-    override fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse? {
+    fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse? {
         return minioClient.getObject(
             GetObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserIdWithExtension()).build()
         )

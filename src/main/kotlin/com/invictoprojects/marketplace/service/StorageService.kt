@@ -10,7 +10,6 @@ import java.util.*
 
 interface StorageService {
 
-    fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse?
     fun getObject(): Optional<InputStream>
     fun removeObject()
     fun getUserIdWithExtension(): String

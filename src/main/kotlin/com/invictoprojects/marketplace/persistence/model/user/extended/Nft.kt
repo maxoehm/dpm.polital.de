@@ -23,7 +23,7 @@ class Nft(
     var showcase: Boolean = false, ) {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var nftId: Int = 0
+    var nftId: Long = 0
     var deadline: String? = null
     var author_link: String? = null
     var bid: Int = 0

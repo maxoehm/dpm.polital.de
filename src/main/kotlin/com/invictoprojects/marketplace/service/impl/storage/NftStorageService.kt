@@ -25,19 +25,29 @@ class NftStorageService (
     private final val bucketNameBanner = "users.nft"
     private final val expiryConstant = 7 * 24 * 60 * 60 // 7 days
 
+
+    /**
+     * Sets a generated id that is assigned to the user as object name to finde object later
+     */
     override fun uploadObject(file: MultipartFile): InputStream {
-        userInformationImpl.setBanner(FilenameUtils.getExtension(file.originalFilename));
+        val tags = mutableMapOf<String, String>()
+        tags["user_id"] = userService.getCurrentUser().id.toString()
 
         minioClient.putObject(PutObjectArgs.builder()
-            .bucket(bucketNameBanner).`object`(getUserIdWithExtension())
+            .bucket(bucketNameBanner).`object`(userInformationImpl.addNft().toString())
             .stream(file.inputStream, file.size, -1)
             .contentType(file.contentType)
+            .tags(tags)
             .build())
 
         return getObject().get()
     }
 
-    override fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse? {
+    //ToDo: Implement those
+    fun getAllByUser() {
+    }
+
+    fun getNftObject(bucketName: String, objectName: String): GetObjectResponse? {
         return minioClient.getObject(
             GetObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserIdWithExtension()).build()
         )
@@ -56,7 +66,7 @@ class NftStorageService (
 
     /**
      * Endpoint returns image url
-     * ToDo: Make it return on upload
+     * ToDo: Make it return on all users uploads
      */
     override fun getUrl(): String {
 

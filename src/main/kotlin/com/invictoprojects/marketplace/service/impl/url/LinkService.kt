@@ -11,7 +11,7 @@ object LinkUtils {
         return "https://invicto.marketplace.com/user/${user.username}/profile"
     }
 
-    fun getNftLink(nftId: Int): String {
+    fun getNftLink(nftId: Long): String {
         return "https://invicto.marketplace.com/nft/$nftId"
     }
 

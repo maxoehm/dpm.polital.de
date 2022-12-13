@@ -24,7 +24,7 @@ interface UserInformationService {
 
     fun save(userInfo: UserInformationDto): UserInformation?
 
-    fun addNft(nftDto: NftDto)
+    fun addNft(nftDto: NftDto): Long
 
     fun addHotCollection(hotCollectionDto: HotCollectionDto)
 

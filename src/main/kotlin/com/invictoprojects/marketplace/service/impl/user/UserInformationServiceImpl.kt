@@ -78,7 +78,7 @@ class UserInformationServiceImpl(
         } else ResponseEntity(HttpStatus.CONFLICT)
     }
 
-    override fun addNft(nftDto: NftDto) {
+    override fun addNft(nftDto: NftDto): Long {
         val user = getCurrentUser()
         val nft: Nft = MappingUtils.convertToEntity(nftDto)
         nft.userInformation = user.userInformation
@@ -95,11 +95,34 @@ class UserInformationServiceImpl(
 
         }
 
+        nftRepository.save(nft)
+        user.userInformation?.nfts?.add(nft)
+        userService.updateInformation(user)
 
+        return nft.nftId;
+    }
+
+    fun addNft(): Long {
+        val user = getCurrentUser()
+        val nft = Nft()
+        nft.userInformation = user.userInformation
+
+        nft.apply {
+            author = user.id?.toInt()!!
+            author_link = LinkUtils.getAuthorLink(getCurrentUserInformation())
+            //ToDo: Implement bid
+            //ToDo: Implement max bid
+            //ToDo: Implement likes
+            //ToDo: Implement views
+            nft_link = LinkUtils.getNftLink(nft.nftId)
+            bid_link = LinkUtils.getBidLink(nft.bid)
+        }
 
         nftRepository.save(nft)
         user.userInformation?.nfts?.add(nft)
         userService.updateInformation(user)
+
+        return nft.nftId;
     }
 
     override fun addHotCollection(hotCollectionDto: HotCollectionDto) {

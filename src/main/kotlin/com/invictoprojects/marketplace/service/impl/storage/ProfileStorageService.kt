@@ -26,8 +26,6 @@ class ProfileStorageService (
     private final val expiryConstant = 7 * 24 * 60 * 60 // 7 days
 
     override fun uploadObject(file: MultipartFile): InputStream {
-        userInformationImpl.setBanner(FilenameUtils.getExtension(file.originalFilename));
-
         minioClient.putObject(PutObjectArgs.builder()
             .bucket(bucketNameBanner).`object`(getUserIdWithExtension())
             .stream(file.inputStream, file.size, -1)
@@ -37,7 +35,7 @@ class ProfileStorageService (
         return getObject().get()
     }
 
-    override fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse? {
+    fun getProfileObject(bucketName: String, objectName: String): GetObjectResponse? {
         return minioClient.getObject(
             GetObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserIdWithExtension()).build()
         )
