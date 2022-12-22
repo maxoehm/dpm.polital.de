@@ -102,6 +102,10 @@ class UserInformationServiceImpl(
         return nft.nftId;
     }
 
+    /**
+     * Creates and saves nft entity
+     * @return id of created nft
+     */
     fun addNft(): Long {
         val user = getCurrentUser()
         val nft = Nft()
@@ -109,7 +113,7 @@ class UserInformationServiceImpl(
 
         nft.apply {
             author = user.id?.toInt()!!
-            author_link = LinkUtils.getAuthorLink(getCurrentUserInformation())
+            //author_link = LinkUtils.getAuthorLink(getCurrentUserInformation())
             //ToDo: Implement bid
             //ToDo: Implement max bid
             //ToDo: Implement likes
@@ -122,7 +126,7 @@ class UserInformationServiceImpl(
         user.userInformation?.nfts?.add(nft)
         userService.updateInformation(user)
 
-        return nft.nftId;
+        return nft.id!!;
     }
 
     override fun addHotCollection(hotCollectionDto: HotCollectionDto) {

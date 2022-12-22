@@ -27,7 +27,7 @@ class NftStorageService (
 
 
     /**
-     * Sets a generated id that is assigned to the user as object name to finde object later
+     * Uploads a file to the MinIO server and names it with the entities id
      */
     override fun uploadObject(file: MultipartFile): InputStream {
         val tags = mutableMapOf<String, String>()

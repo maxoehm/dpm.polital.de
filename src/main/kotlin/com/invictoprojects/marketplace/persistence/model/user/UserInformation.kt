@@ -24,7 +24,6 @@ class UserInformation (
     @OneToMany(mappedBy = "userInformation", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
     open var nfts: MutableList<Nft> = mutableListOf(),
 
-
     @OneToMany(mappedBy = "userInformation", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
     open var hotCollections: MutableList<HotCollection> = mutableListOf(),
 

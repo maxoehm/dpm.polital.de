@@ -4,6 +4,7 @@ import com.invictoprojects.marketplace.persistence.model.user.UserInformation
 import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
+import org.jetbrains.annotations.NotNull
 import java.util.*
 import javax.persistence.*
 
@@ -24,6 +25,8 @@ class Nft(
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     var nftId: Long = 0
+
+
     var deadline: String? = null
     var author_link: String? = null
     var bid: Int = 0
