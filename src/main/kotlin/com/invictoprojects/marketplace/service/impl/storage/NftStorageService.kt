@@ -1,6 +1,8 @@
 package com.invictoprojects.marketplace.service.impl.storage
 
 import com.invictoprojects.marketplace.config.MinIOConfig
+import com.invictoprojects.marketplace.persistence.model.user.UserInformation
+import com.invictoprojects.marketplace.persistence.model.user.extended.Nft
 import com.invictoprojects.marketplace.service.StorageService
 import com.invictoprojects.marketplace.service.impl.user.UserInformationServiceImpl
 import com.invictoprojects.marketplace.service.impl.user.UserService
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.*
+import java.util.function.Predicate
 
 
 @Service
@@ -25,24 +28,51 @@ class NftStorageService (
     private final val bucketNameBanner = "users.nft"
     private final val expiryConstant = 7 * 24 * 60 * 60 // 7 days
 
+    /**
+     * Uploads a file to the MinIO server and names it with the entities id
+     */
     override fun uploadObject(file: MultipartFile): InputStream {
-        userInformationImpl.setBanner(FilenameUtils.getExtension(file.originalFilename));
+        val tags = mutableMapOf<String, String>()
+        tags["user_id"] = userService.getCurrentUser().id.toString()
 
         minioClient.putObject(PutObjectArgs.builder()
-            .bucket(bucketNameBanner).`object`(getUserIdWithExtension())
+            .bucket(bucketNameBanner).`object`(userInformationImpl.addNft(file.contentType!!))
             .stream(file.inputStream, file.size, -1)
             .contentType(file.contentType)
+            .tags(tags)
             .build())
 
         return getObject().get()
     }
 
-    override fun getBannerObject(bucketName: String, objectName: String): GetObjectResponse? {
+    fun getAllByUserAndStatus(status: String) {
+        userService.getCurrentUser().userInformation?.nfts?.stream()?.filter { obj: Nft -> obj.status.equals(status) }!!
+    }
+
+    fun getAllUrlsByUserAndStatus(status: String): ArrayList<String> {
+        val urls: ArrayList<String> = ArrayList()
+        userService.getCurrentUser().userInformation?.nfts?.stream()?.filter{
+                obj: Nft -> obj.status.equals(status)
+        }!!.forEach { nft: Nft ->
+            urls.add(
+                minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                        .method(Method.GET)
+                        .bucket(bucketNameBanner)
+                        .`object`(nft.id.toString() + "." + nft.file_type)
+                        .expiry(expiryConstant)
+                        .build()
+                ))
+        }
+
+        return urls
+    }
+
+    fun getNftObject(bucketName: String, objectName: String): GetObjectResponse? {
         return minioClient.getObject(
             GetObjectArgs.builder().bucket(bucketNameBanner).`object`(getUserIdWithExtension()).build()
         )
     }
-
 
     override fun getObject(): Optional<InputStream> {
         val byteArray = minioClient.getObject(
@@ -56,7 +86,7 @@ class NftStorageService (
 
     /**
      * Endpoint returns image url
-     * ToDo: Make it return on upload
+     * ToDo: Make it return on all users uploads
      */
     override fun getUrl(): String {
 

@@ -121,20 +121,6 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
         return NimbusJwtEncoder(jwks)
     }
 
-    fun jwtDecoder(token: String): DecodedJWT? {
-        val algorithm: Algorithm = Algorithm.RSA256(publicKey, privateKey)
-        val decodedJWT: DecodedJWT? = null
-        try {
-            val verifier: JWTVerifier = JWT.require(algorithm) // specify an specific claim validations
-                .withIssuer("invicto") // reusable verifier instance
-                .build()
-            val decodedJWT = verifier.verify(token);
-        } catch (_: JWTVerificationException) { }
-
-        return decodedJWT
-    }
-
-
     fun jwtEncoder(username: String, verified: Boolean, userId: Long): String? {
         val algorithm: Algorithm = Algorithm.RSA256(publicKey, privateKey)
 

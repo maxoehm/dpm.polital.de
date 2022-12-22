@@ -35,7 +35,7 @@ class SwaggerConfig {
             .title("Marketplace API")
             .version("1.0")
             .description("API for Marketplace Application")
-            .contact(Contact("Development Team", "team", "marketplaceofficial59@gmail.com@email.com"))
+            .contact(Contact("Development Team", "team", ""))
             .license("Apache License Version 2.0")
             .build()
 
