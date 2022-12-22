@@ -10,6 +10,7 @@ import com.invictoprojects.marketplace.persistence.repository.UserInformationRep
 import com.invictoprojects.marketplace.persistence.repository.UserRepository
 import com.invictoprojects.marketplace.persistence.repository.user.*
 import com.invictoprojects.marketplace.service.impl.url.LinkUtils
+import com.invictoprojects.marketplace.utils.FileUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -106,7 +107,7 @@ class UserInformationServiceImpl(
      * Creates and saves nft entity
      * @return id of created nft
      */
-    fun addNft(): Long {
+    fun addNft(fileType: String): String {
         val user = getCurrentUser()
         val nft = Nft()
         nft.userInformation = user.userInformation
@@ -120,13 +121,15 @@ class UserInformationServiceImpl(
             //ToDo: Implement views
             nft_link = LinkUtils.getNftLink(nft.nftId)
             bid_link = LinkUtils.getBidLink(nft.bid)
+            status = "private"
+            file_type = fileType.replace("image/", "")
         }
 
         nftRepository.save(nft)
         user.userInformation?.nfts?.add(nft)
         userService.updateInformation(user)
 
-        return nft.id!!;
+        return nft.id!!.toString() + "." + nft.file_type;
     }
 
     override fun addHotCollection(hotCollectionDto: HotCollectionDto) {

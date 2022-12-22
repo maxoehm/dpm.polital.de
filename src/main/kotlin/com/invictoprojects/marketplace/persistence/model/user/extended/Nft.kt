@@ -26,6 +26,8 @@ class Nft(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var nftId: Long = 0
 
+    @NotNull
+    var file_type: String = ""
 
     var deadline: String? = null
     var author_link: String? = null
